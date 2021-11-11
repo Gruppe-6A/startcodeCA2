@@ -108,12 +108,6 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>9.0.1</version>
         </dependency>
-        
-        <dependency>
-            <groupId>org.mindrot</groupId>
-            <artifactId>jbcrypt</artifactId>
-            <version>0.4</version>
-        </dependency>
 
         <!-- Used for setting database name in pom.xml -->
         <dependency>
