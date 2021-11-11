@@ -1,14 +1,13 @@
 package utils;
 import com.google.gson.Gson;
-import com.nimbusds.jose.shaded.json.JSONArray;
 import dtos.*;
+import org.glassfish.jersey.internal.guava.Ticker;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -21,33 +20,32 @@ public class HttpUtils {
     }
 
     private static Gson gson = new Gson();
-    public static CryptoDTO fetchDataParallel() throws IOException, MalformedURLException, ExecutionException, InterruptedException
+    public static TickerDTO fetchDataParallel() throws IOException, MalformedURLException, ExecutionException, InterruptedException
     {  ExecutorService es = Executors.newCachedThreadPool();
-        Future<BitcoinDTO> bitcoinDTOFuture = es.submit(
-                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=BTC-USD").substring(11, 79), BitcoinDTO.class));
-        Future<EthereumDTO> ethereumDTOFuture = es.submit(
-                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=ETH-USD"), EthereumDTO.class));
-        Future<DogeDTO> dogeDTOFuture = es.submit(
-                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=DOGE-BTC"), DogeDTO.class));
-        Future<LitecoinDTO> litecoinDTOFuture = es.submit(
-                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=LTC-BTC"), LitecoinDTO.class));
-        Future<RippleDTO> rippleDTOFuture = es.submit(
-                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=XRP-BTC"), RippleDTO.class));
-        BitcoinDTO bitcoinDTO = bitcoinDTOFuture.get();
+        Future<TickerDTO> bitcoinFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=BTC-USD"), TickerDTO.class));
+        Future<TickerDTO> ethereumFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=ETH-USD"), TickerDTO.class));
+        Future<TickerDTO> dogeFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=DOGE-BTC"), TickerDTO.class));
+        Future<TickerDTO> litecoinFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=LTC-BTC"), TickerDTO.class));
+        Future<TickerDTO> rippleFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=XRP-BTC"), TickerDTO.class));
 
-        System.out.println(bitcoinDTO.getprice());
-        System.out.println(bitcoinDTOFuture.isDone());
 
-        EthereumDTO ethereumDTO = ethereumDTOFuture.get();
-        DogeDTO dogeDTO = dogeDTOFuture.get();
-        LitecoinDTO litecoinDTO = litecoinDTOFuture.get();
-        RippleDTO rippleDTO = rippleDTOFuture.get();
+        TickerDTO combinedTicker = new TickerDTO(new ArrayList<CrypDTO>());
 
-        CryptoDTO cryptoDTO = new CryptoDTO(bitcoinDTO, ethereumDTO, dogeDTO, litecoinDTO, rippleDTO);
-        String combined = gson.toJson(cryptoDTO);
+        combinedTicker.addTicker(bitcoinFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(ethereumFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(dogeFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(litecoinFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(rippleFuture.get().getTickers().get(0));
+
+        String combined = gson.toJson(combinedTicker);
 
         System.out.println(combined);
-        return cryptoDTO;
+        return combinedTicker;
     }
 
     public static String fetchData(String _url) throws MalformedURLException, IOException{
