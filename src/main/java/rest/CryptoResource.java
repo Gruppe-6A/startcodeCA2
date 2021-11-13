@@ -34,9 +34,17 @@ public class CryptoResource {
     }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("user")
     @Path("/all")
     public String getAll() throws IOException, ExecutionException, InterruptedException {
         return gson.toJson(HttpUtils.fetchDataParallel());
+    }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+
+    @Path("/tworemoteservers")
+    public String getFromTwo() throws IOException, ExecutionException, InterruptedException {
+        return gson.toJson(HttpUtils.combinedEnds());
     }
 
 

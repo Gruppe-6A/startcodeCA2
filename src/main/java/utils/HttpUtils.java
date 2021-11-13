@@ -36,18 +36,53 @@ public class HttpUtils {
 
         TickerDTO combinedTicker = new TickerDTO(new ArrayList<CrypDTO>());
 
+
         combinedTicker.addTicker(bitcoinFuture.get().getTickers().get(0));
         combinedTicker.addTicker(ethereumFuture.get().getTickers().get(0));
         combinedTicker.addTicker(dogeFuture.get().getTickers().get(0));
         combinedTicker.addTicker(litecoinFuture.get().getTickers().get(0));
         combinedTicker.addTicker(rippleFuture.get().getTickers().get(0));
 
-        String combined = gson.toJson(combinedTicker);
 
-        System.out.println(combined);
         return combinedTicker;
+
+    }
+    public static CombinedDTO combinedEnds()throws IOException, MalformedURLException, ExecutionException, InterruptedException {
+        ExecutorService es = Executors.newCachedThreadPool();
+        Future<TickerDTO> bitcoinFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=BTC-USD"), TickerDTO.class));
+        Future<TickerDTO> ethereumFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=ETH-USD"), TickerDTO.class));
+        Future<TickerDTO> dogeFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=DOGE-BTC"), TickerDTO.class));
+        Future<TickerDTO> litecoinFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=LTC-BTC"), TickerDTO.class));
+        Future<TickerDTO> rippleFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.coinstats.app/public/v1/tickers?exchange=yobit&pair=XRP-BTC"), TickerDTO.class));
+        Future<JokeDTO> jokeFuture = es.submit(
+                () -> gson.fromJson(HttpUtils.fetchData("https://api.chucknorris.io/jokes/random"), JokeDTO.class));
+
+
+        TickerDTO combinedTicker = new TickerDTO(new ArrayList<CrypDTO>());
+
+
+        combinedTicker.addTicker(bitcoinFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(ethereumFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(dogeFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(litecoinFuture.get().getTickers().get(0));
+        combinedTicker.addTicker(rippleFuture.get().getTickers().get(0));
+
+        JokeDTO jokes = jokeFuture.get();
+        CombinedDTO combinedDTO = new CombinedDTO(combinedTicker, jokes);
+
+        return combinedDTO;
     }
 
+    public static JokeDTO fetchJoke() throws IOException {
+        String chuck = HttpUtils.fetchData("https://api.chucknorris.io/jokes/random");
+        JokeDTO JokeDTO = gson.fromJson(chuck, JokeDTO.class);
+        return JokeDTO;
+    }
     public static String fetchData(String _url) throws MalformedURLException, IOException{
         URL url = new URL(_url);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
