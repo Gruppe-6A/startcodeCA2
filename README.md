@@ -1,60 +1,36 @@
 
-*This project is meant as start code for projects and exercises given in Flow-1+2 (+3 using the security-branch) at http://cphbusiness.dk in the Study Program "AP degree in Computer Science"*
-
-*Projects which are expected to use this start-code are projects that require all, or most of the following technologies:*
- - *JPA and REST*
-- *Testing, including database test*
-- *Testing, including tests of REST-API's*
-- *CI and CONTINUOUS DELIVERY*
-
-## Flow 2 week 1
+*This project is backend startcode for projects in 3rd semester"*
 
 ### Preconditions
-*In order to use this code, you should have a local developer setup + a "matching" droplet on Digital Ocean as described in the 3. semester guidelines* 
+*To use this code you should have a local developer setup with a matching setup on a virtual server, this setup is described in the following documents*
+- [Developer setup on local machine](https://docs.google.com/document/d/1aBUJrZkWGmyqgnZ7GncMEQYJdX3euuFi_j-N0D63QyM)
+- [Virtual-server setup](https://docs.google.com/document/d/1tY1QKk4CK70iH0abeetCDMgNhKFhR558V9J4_0at-9I)
 
-### Getting Started
 
-This document explains how to use this code (build, test and deploy), locally with maven, and remotely with maven controlled by Github actions
- - [How to use](https://docs.google.com/document/d/1rymrRWF3VVR7ujo3k3sSGD_27q73meGeiMYtmUtYt6c/edit?usp=sharing)
-
-### JPA snippets
+### Setup database)
+- Connect to your database on your local docker
+- Create new database (Remeber name for later use)
+- Use the provided SQLDump (located in project root folder) the populate database with an admin and user
+- Repeat with your virtual machine
 
 ### Setup in Intellij
 - open view->too windows->persistence
 - open the Database tab and create a new data source (remember to point to a database event though this is already written in the persistence unit. This is necessary in order to use the JPQL console)
-- in the persistence window right click the pu or an entity and choose "console"
-- write a jpql query in the console and execute it.
-### In netbeans it is much simpler
-- just right click the pu and choose: "Run JPQL query"
+- Open pom.xml
+  - Change <name>dat3-startcode</name> to something that soothes you
+  - Change <remote.server></remote.server> to your own domain name ie. https://XXX.dk/manager/text
+  - Change <db.name></db.name> to the name of the database created in section "Setup database" on your virtual-machine
 
-### Create model in workbench (cannot be done from Intellij - No model designer yet)
-- file-> new model
-- dobbelclick the mydb icon and change to relevant database (create one first if needed)
-- click the Add Diagram icon
-- click the table icon in the left side panel and click in the squared area to insert new table
-- dobbelclick the new table and change name and add columns (remember to add a check mark in 'ai' for the primary key)
-- do the process again to add a second table
-- now in the panel choose the 'non identifying relationship' on to many
-- click first on the child table (the one that should hold the foreign key) and then on the parent. A new relationship was now added.
-- When done with designing - goto top menu: Database->forward engineer.
-  - Check that all settings looks right and click continue
-  - click continue again (no changes needed here)
-  - Make sure the 'Export mysql table objects' is checked and Show filter to make sure that all your tables are in the 'objects to process' window -> click continue
-  - Verify that the generated script looks right -> click continue
-  - click close and open the database to see the new tables, that was just created.
 
-### create entities from database in Intellij (Persistence mappings)
-- From inside the Persistence window:
-- Right-click a persistence unit, point to Generate Persistence Mapping and select By Database Schema.
-- Select the 
-  - data source 
-  - package
-  - tick tables to include
-  - open tables to see columns and add the ones with mapped type: Collection<SomeEntity> and SomeEntity
-  - click OK.
-
-### In netbeans it is much easier
-- Right click project name -> new -> persistence -> Entity classes From Database -> choose database connection from list -> add the tables you need -> Finish
+### Github setup
+- Create a new repository on github
+- Open repository settings -> Secrets
+- Click "New repository secret"
+  - Name it REMOTE_USER
+  - In value type tomcat username to the server added in pom.xml file
+- Click "New repository secret"
+  - Name it REMOTE_PSW
+  - In value type tomcat password to the server added in pom.xml file
 
 
 
