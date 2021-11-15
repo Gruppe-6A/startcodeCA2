@@ -7,7 +7,7 @@
 - [Virtual-server setup](https://docs.google.com/document/d/1tY1QKk4CK70iH0abeetCDMgNhKFhR558V9J4_0at-9I)
 
 
-### Setup database)
+### Setup database
 - Connect to your database on your local docker
 - Create new database (Remember name for later use)
 - Use the provided SQLDump (located in project root folder) the populate database with an admin and user
