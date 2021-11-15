@@ -1,5 +1,5 @@
 
-*This project is backend startcode for projects in 3rd semester"*
+*This project is backend startcode for projects in 3rd semester*
 
 ### Preconditions
 *To use this code you should have a local developer setup with a matching setup on a virtual server, this setup is described in the following documents*
@@ -9,7 +9,7 @@
 
 ### Setup database)
 - Connect to your database on your local docker
-- Create new database (Remeber name for later use)
+- Create new database (Remember name for later use)
 - Use the provided SQLDump (located in project root folder) the populate database with an admin and user
 - Repeat with your virtual machine
 
