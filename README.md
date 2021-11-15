@@ -14,8 +14,8 @@
 - Repeat with your virtual machine
 
 ### Setup in Intellij
-- open view->too windows->persistence
-- open the Database tab and create a new data source (remember to point to a database event though this is already written in the persistence unit. This is necessary in order to use the JPQL console)
+- Open view->too windows->persistence
+- Open the Database tab and create a new data source (remember to point to a database event though this is already written in the persistence unit. This is necessary in order to use the JPQL console)
 - Open pom.xml
   - Change <name>dat3-startcode</name> to something that soothes you
   - Change <remote.server></remote.server> to your own domain name ie. https://XXX.dk/manager/text
